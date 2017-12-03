@@ -1,0 +1,26 @@
+package dao;
+
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Collection;
+
+import exceptions.DuplicateEntryException;
+import exceptions.NullConnectionException;
+import javaBeans.Coupon;
+import javaBeans.CouponType;
+import javaBeans.Customer;
+
+public interface CouponDAO 
+{
+	public void createCoupon(Coupon coup) throws SQLException, ClassNotFoundException, InterruptedException, DuplicateEntryException, NullConnectionException;
+	
+	public void removeCoupon(Coupon coup) throws SQLException, ClassNotFoundException, InterruptedException, NullConnectionException;
+	
+	public void updateCoupon(Coupon coup) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+	
+	public Coupon getCoupon(int id) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+	
+	public Collection<Coupon> getAllCoupon() throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+	
+	public Collection<Coupon> getCouponByType(CouponType ctyp) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+}

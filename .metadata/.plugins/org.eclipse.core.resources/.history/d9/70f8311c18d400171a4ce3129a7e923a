@@ -1,0 +1,33 @@
+package allSqlQueriesAndDateConv;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateConverter 
+{
+	
+	public static Date  stringToDate(String date) throws ParseException
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
+		java.util.Date newdate = sdf.parse(date);
+
+		return newdate;
+
+	}
+
+	/**
+	 * changes the java date that has been given to string
+	 * @param date a date in a java date format
+	 * @return a date in a string format
+	 */
+	public static String dateToString(Date date)
+	{
+		DateFormat sdf = new SimpleDateFormat("yy-MM-dd");
+		String newDate = sdf.format(date);
+
+		return newDate;
+	}
+
+}

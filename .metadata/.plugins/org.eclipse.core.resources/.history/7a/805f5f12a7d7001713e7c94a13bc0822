@@ -1,0 +1,289 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import allSqlQueriesAndDateConv.CouponSqlQueries;
+import allSqlQueriesAndDateConv.DateConverter;
+import conPool.ConnectionPool;
+import exceptions.DuplicateEntryException;
+import exceptions.EmptyEntryException;
+import exceptions.NullConnectionException;
+import javaBeans.Coupon;
+import javaBeans.CouponType;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CouponDBDAO.
+ */
+public class CouponDBDAO implements CouponDAO
+{
+
+	/** The pool. */
+	private ConnectionPool pool;
+	
+	/** The coupons array. */
+	ArrayList<Coupon> coupons_array = new ArrayList<>();
+
+
+	/** The user company id. */
+	private long user_Company_id;
+
+	/**
+	 * Gets the user company id.
+	 *
+	 * @return the user company id
+	 */
+	public long getUser_Company_id() 
+	{
+		return user_Company_id;
+	}
+
+	/**
+	 * Sets the user company id.
+	 *
+	 * @param user_Company_id the new user company id
+	 */
+	public void setUser_Company_id(long user_Company_id) 
+	{
+		this.user_Company_id = user_Company_id;
+	}
+
+
+	/**
+	 * Instantiates a new coupon DBDAO.
+	 */
+	//======================================================Default constructor==============================================
+	public CouponDBDAO()
+	{
+		pool = ConnectionPool.getInstance();
+	}
+
+	//======================================================Create coupon====================================================
+
+	/**
+	 * Receives a coupon instance and register it in the database
+	 */
+	@Override
+	public void createCoupon(Coupon coup) throws SQLException, ClassNotFoundException, InterruptedException, DuplicateEntryException, NullConnectionException
+	{
+		Connection con1 = pool.getConnection();
+		Statement stt;
+		ResultSet rs;
+
+		stt = con1.createStatement();
+		rs = stt.executeQuery(String.format(CouponSqlQueries.coupons_by_title, coup.getTitle()));
+		if(rs.next())
+		{
+			throw new DuplicateEntryException("the user with the company id " + this.getUser_Company_id() + " tried to create a coupon"
+					+ " with a title that already exist in the database");		}
+		else
+		{
+
+			String insert_coupon_query = CouponSqlQueries.insert_coupon_to_coupon;
+			PreparedStatement prst = con1.prepareStatement(insert_coupon_query,Statement.RETURN_GENERATED_KEYS);
+			prst.setString(1, coup.getTitle());
+			prst.setDate(2, (Date) coup.getStartDate());
+			System.out.println(coup.getStartDate().toString());
+			prst.setDate(3, coup.getEndDate().toString());
+			prst.setInt(4, coup.getAmount());
+			prst.setObject(5, coup.getType());
+			prst.setString(6, coup.getMessage());
+			prst.setDouble(7, coup.getPrice());
+			prst.setString(8, coup.getImage());
+
+			prst.execute();
+			ResultSet rs1 = prst.getGeneratedKeys();
+			long id = 0;
+			if(rs.next())
+			{
+				id = rs1.getInt(1);
+			}
+			String insert_to_company_coupon_query = CouponSqlQueries.insert_coupon_to_compCoup;
+			PreparedStatement prst1 = con1.prepareStatement(insert_to_company_coupon_query);
+			prst1.setLong(1, this.user_Company_id);
+			prst1.setLong(2, id);
+			prst1.execute();
+			System.out.println("Coupon created Successfully:) ");
+		}
+		pool.returnConnection(con1);
+	}
+
+	//======================================================Remove coupon=========================================================
+
+	/**
+	 * receives a coupon instance and removes it's entries from the database
+	 */
+	@Override
+	public void removeCoupon(Coupon coup) throws SQLException, ClassNotFoundException, InterruptedException, NullConnectionException, EmptyEntryException
+	{
+
+		Connection con1 = pool.getConnection();
+
+		long coup_id = coup.getId();
+
+		Statement stt = con1.createStatement();
+		ResultSet rs;
+		rs = stt.executeQuery(String.format(CouponSqlQueries.coupons_by_id, coup_id));
+		if(rs.next())
+		{
+			Statement stt1 = con1.createStatement();
+			stt1.execute(String.format(CouponSqlQueries.delete_coupon_by_coupon_id, coup_id));
+			stt1.execute(String.format(CouponSqlQueries.delete_company_coupon_by_coupon_id, coup_id));
+			stt1.execute(String.format(CouponSqlQueries.delete_customer_coupon_by_coupon_id, coup_id));
+			System.out.println("coupon has been removed");
+
+
+		}
+		else
+		{
+			pool.returnConnection(con1);
+			throw new EmptyEntryException("trying to update un existed coupon!");
+		}
+	}
+
+	//======================================================Update coupon========================================================
+
+	/**
+	 * Receives a coupon instance and update it's entries in the database
+	 */
+	@Override
+	public void updateCoupon(Coupon coup) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException, EmptyEntryException
+	{
+		Connection con1 = pool.getConnection();
+
+		ResultSet rs;
+		Statement stt;
+		stt = con1.createStatement();
+		rs = stt.executeQuery(String.format(CouponSqlQueries.coupons_by_id, coup.getId()));
+		if(rs.next())
+		{
+			String Update_coupon_query = CouponSqlQueries.update_coupon_by_id;
+			PreparedStatement prpst = con1.prepareStatement(Update_coupon_query);
+			prpst.setString (1, coup.getTitle());
+			prpst.setString (2, DateConverter.dateToString(coup.getStartDate()));
+			prpst.setString (3, DateConverter.dateToString(coup.getEndDate()));
+			prpst.setInt(4, coup.getAmount());
+			prpst.setString(5, coup.getType().toString());
+			prpst.setString(6, coup.getMessage());
+			prpst.setDouble(7, coup.getPrice());
+			prpst.setString(8, coup.getImage());
+			prpst.setLong(9, coup.getId());
+			prpst.execute();
+			System.out.println("coupon has been updated!");
+		}
+		else
+		{
+			pool.returnConnection(con1);
+			throw new EmptyEntryException("trying to update un existed coupon!");
+		}
+
+	}
+
+	//======================================================Get coupon by id======================================================
+
+	/**
+	 * Receives an id of a coupon and returns an instance of that coupon from the database
+	 */
+	@Override
+	public Coupon getCoupon(int id) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException
+	{
+		Coupon coupon = new Coupon();
+		Connection con1 = pool.getConnection();
+
+		Statement stt;
+		ResultSet rs;
+		stt = con1.createStatement();
+		rs = stt.executeQuery(String.format(CouponSqlQueries.coupons_by_id, id));
+		while(rs.next())
+		{
+			coupon.setId(rs.getLong("ID"));
+			coupon.setTitle(rs.getString("TITLE"));
+			coupon.setStartDate(DateConverter.stringToDate(rs.getString("START_DATE")));
+			coupon.setEndDate(DateConverter.stringToDate(rs.getString("END_DATE")));
+			coupon.setAmount(rs.getInt("AMOUNT"));
+			coupon.setType(CouponType.valueOf(rs.getString("TYPE")));
+			coupon.setMessage(rs.getString("MESSAGE"));
+			coupon.setPrice(rs.getDouble("PRICE"));
+			coupon.setImage(rs.getString("IMAGE"));
+		}
+		pool.returnConnection(con1);
+		return coupon;
+	}
+
+	//======================================================Get all coupons======================================================
+
+	/**
+	 * returning an ArrayList of all the coupons in the database
+	 */
+	@Override
+	public Collection<Coupon> getAllCoupon() throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException
+	{
+		coupons_array.removeAll(coupons_array);
+
+		Connection con1 = pool.getConnection();
+
+		Statement stt3 = con1.createStatement();
+		ResultSet rs3;
+		rs3 = stt3.executeQuery(String.format(CouponSqlQueries.all_coupons));
+		while(rs3.next())
+		{
+			Coupon thecoupon = new Coupon();
+			thecoupon.setId(rs3.getLong("ID"));
+			thecoupon.setTitle(rs3.getString("TITLE"));
+			thecoupon.setStartDate(DateConverter.stringToDate(rs3.getString("START_DATE")));
+			thecoupon.setEndDate(DateConverter.stringToDate(rs3.getString("END_DATE")));
+			thecoupon.setAmount(rs3.getInt("AMOUNT"));
+			thecoupon.setType(CouponType.valueOf(rs3.getString("TYPE")));
+			thecoupon.setMessage(rs3.getString("MESSAGE"));
+			thecoupon.setPrice(rs3.getDouble("PRICE"));
+			thecoupon.setImage(rs3.getString("IMAGE"));
+			coupons_array.add(thecoupon);
+
+		}			
+		pool.returnConnection(con1);
+		return coupons_array;
+
+	}
+
+	//======================================================Get coupon by type======================================================
+
+	/**
+	 * Receives a coupon type and returns an ArrayList of all the coupons in the database of that type
+	 */
+	@Override
+	public Collection<Coupon> getCouponByType(CouponType ctyp) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException
+	{
+		coupons_array.removeAll(coupons_array);
+		Connection con1 = pool.getConnection();
+
+		Statement stt = con1.createStatement();
+		ResultSet rs5;
+		rs5 = stt.executeQuery(String.format(CouponSqlQueries.coupons_by_type, ctyp.toString()));
+		while(rs5.next())
+		{
+			Coupon coupn = new Coupon();
+			coupn.setId(rs5.getLong("ID"));
+			coupn.setTitle(rs5.getString("TITLE"));
+			coupn.setStartDate(DateConverter.stringToDate(rs5.getString("START_DATE")));
+			coupn.setEndDate(DateConverter.stringToDate(rs5.getString("END_DATE")));
+			coupn.setAmount(rs5.getInt("AMOUNT"));
+			coupn.setType(CouponType.valueOf(rs5.getString("TYPE")));
+			coupn.setMessage(rs5.getString("MESSAGE"));
+			coupn.setPrice(rs5.getDouble("PRICE"));
+			coupn.setImage(rs5.getString("IMAGE"));
+			coupons_array.add(coupn);
+		}
+		pool.returnConnection(con1);
+		return coupons_array;
+	}
+
+
+}

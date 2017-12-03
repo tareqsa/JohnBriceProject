@@ -1,0 +1,13 @@
+package allSqlQueries;
+
+public class CompanySqlQueries 
+{
+
+	public static String companies_by_id = "SELECT * FROM company WHERE ID='%1s'";
+	public static String
+	public static String
+	public static String
+	public static String
+	public static String
+	
+}

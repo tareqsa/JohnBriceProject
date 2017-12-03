@@ -1,0 +1,32 @@
+package allSqlQueriesAndDateConv;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CompanySqlQueries.
+ */
+public class CompanySqlQueries 
+{
+
+	/** The all companies. */
+	public static String all_companies = "SELECT * FROM company";
+	
+	/** The companies by id. */
+	public static String companies_by_id = "SELECT * FROM company WHERE ID='%1s'";
+	
+	/** The companies by name. */
+	public static String companies_by_name = "SELECT * FROM company WHERE COMP_NAME='%1s'";
+		
+	/** The insert company. */
+	public static String insert_company = "INSERT INTO company (COMP_NAME, PASSWORD, EMAIL) values(?,?,?)";
+	
+	/** The remove company by id. */
+	public static String remove_company_by_id = "DELETE FROM company WHERE ID='%1s'";
+	
+	/** The update company by id. */
+	public static String update_company_by_id = "UPDATE company SET PASSWORD=?, EMAIL=? WHERE ID=?";
+	
+	/** The companies by comp name and password. */
+	public static String companies_by_compName_and_password = "SELECT * FROM compay WHERE COMP_NAME ='%1s' and PASSWORD ='%2s'";
+
+	
+}

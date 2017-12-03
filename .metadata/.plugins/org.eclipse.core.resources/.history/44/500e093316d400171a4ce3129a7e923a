@@ -1,0 +1,8 @@
+package allSqlQueries;
+
+public class CustomerSqlQueries 
+{
+	public static String AMOUNT_AND_END_DATE_BY_ID = "SELECT amount, end_date FROM couponsystem.coupon WHERE id = '%1s'";
+
+
+}

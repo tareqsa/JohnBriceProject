@@ -1,0 +1,9 @@
+package allSqlQueriesAndDateConv;
+
+public class CustomerSqlQueries 
+{
+	public static String insert_customer_coupon = " INSERT INTO customer_coupon (CUST_ID,COUPON_ID)"
+			+ " values (?, ?)";
+	public static String customers_by_name_and_password = "SELECT * FROM customer WHERE cust_name = '%1s' AND password like '%2s'";
+
+}

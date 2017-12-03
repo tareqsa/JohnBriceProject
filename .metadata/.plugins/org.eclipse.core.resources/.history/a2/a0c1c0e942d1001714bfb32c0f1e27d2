@@ -1,0 +1,132 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Collection;
+
+import javaBeans.Coupon;
+import javaBeans.CouponType;
+import part1.ConnectionPool;
+
+public class CouponDBDAO implements CouponDAO
+{
+	private ConnectionPool pool;
+
+	public CouponDBDAO()
+	{
+		pool = ConnectionPool.getInstance();
+	}
+
+	@Override
+	public void createCoupon(Coupon coup) 
+	{
+		// TODO Auto-generated method stub
+		Connection con = pool.getConnection();
+		Statement stt;
+		ResultSet rs;
+		String create_coupon_query = "SELECT * FROM coupon WHERE ID='"+coup.getId()+"'";
+		try 
+		{
+			stt = con.createStatement();
+			rs = stt.executeQuery(create_coupon_query);
+			if(rs.next())
+			{
+				System.out.println("Coupon is exist!!");
+			}
+			else
+			{
+				String insert_coupon_query = "INSERT INTO coupon (TITLE, START_DATE, END_DATE, AMOUNT, TYPE, MESSAGE, PRICE, IMAGE) values(?,?,?,?,?,?,?,?)";
+				try 
+				{
+					PreparedStatement prst = con.prepareStatement(insert_coupon_query);
+					prst.setString(1, coup.getTitle());
+					prst.setDate(2, coup.getStartDate());
+					prst.setDate(3, coup.getEndDate());
+					prst.setInt(4, coup.getAmount());
+					prst.setObject(5, coup.getType());
+					prst.setString(6, coup.getMessage());
+					prst.setDouble(7, coup.getPrice());
+					prst.setString(8, coup.getImage());
+
+					prst.execute();
+
+				}
+				catch (Exception e) 
+				{
+					// TODO: handle exception
+				}
+
+			}
+			pool.returnConnection(con);
+
+		}catch (Exception e) 
+		{
+			// TODO: handle exception
+		}
+
+	}
+
+
+	@Override
+	public void removeCoupon(Coupon coup) 
+	{
+		// TODO Auto-generated method stub
+		Connection con1 = pool.getConnection();
+		Statement stt;
+		
+		ResultSet rs;
+		String remove_coupon_query = "SELECT * FROM coupon WHERE ID='"+coup.getId()+"'";
+		try 
+		{
+			stt = con1.createStatement();
+			rs = stt.executeQuery(remove_coupon_query);
+			if(rs.next())
+			{
+				String remove_coupon = "DELETE FROM coupon WHERE ID='"+coup.getId()+"'";
+			}
+			else
+			{
+				
+			}
+		}catch (Exception e)
+		{
+			// TODO: handle exception
+		}
+	
+	
+		
+
+	}
+
+	@Override
+	public void updateCoupon(Coupon coup) 
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Coupon getCoupon(int id) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<Coupon> getAllCoupon() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<Coupon> getCouponByType(CouponType ctyp) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+}

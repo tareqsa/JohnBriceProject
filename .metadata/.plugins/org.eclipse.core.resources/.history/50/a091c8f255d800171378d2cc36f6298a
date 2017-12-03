@@ -1,0 +1,35 @@
+package maintests;
+
+import java.util.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import javaBeans.ClientType;
+import javaBeans.Company;
+import conPool.ConnectionPool;
+import javaBeans.Coupon;
+import javaBeans.CouponSystem;
+import javaBeans.CouponType;
+import javaBeans.Customer;
+import dao.CompanyDBDAO;
+import dao.CouponDBDAO;
+import dao.CustomerDBDAO;
+import facades.AdminFacade;
+import facades.CompanyFacade;
+import facades.CustomerFacade;
+import allSqlQueriesAndDateConv.DateConverter;
+
+/**
+ * 
+ * The main class the simulates a UI for the project.
+ *
+ */
+public class Tester
+{
+
+	public static void main(String[] args) 
+	{
+		
+	}
+}

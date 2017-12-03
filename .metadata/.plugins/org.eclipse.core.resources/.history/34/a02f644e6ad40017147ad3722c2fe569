@@ -1,0 +1,8 @@
+package allSqlQueriesAndDateConv;
+
+public class CustomerSqlQueries 
+{
+	public static String insert_customer_coupon = " INSERT INTO customer_coupon (CUST_ID,COUPON_ID)"
+			+ " values (?, ?)";
+
+}

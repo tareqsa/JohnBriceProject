@@ -1,0 +1,20 @@
+package allSqlQueriesAndDateConv;
+
+public class CustomerSqlQueries 
+{
+	
+	public static String customers_by_cust_name = "SELECT * FROM customer WHERE CUST_NAME ='%1s'";
+	public static String customers_by_id = "SELECT * FROM customer WHERE ID ='%1s'";
+
+	public static String delete_customer_by_cust_name = "DELETE FROM customer WHERE CUST_NAME ='%1s'";
+	public static String delete_customer_coupon_by_cust_id = "DELETE FROM customer WHERE CUST_NAME ='%1s'";
+
+
+	public static String insert_customer_coupon = " INSERT INTO customer_coupon (CUST_ID,COUPON_ID) values (?, ?)"
+			+ " values (?, ?)";
+	public static String customers_by_name_and_password = "SELECT * FROM customer WHERE CUST_NAME = '%1s' AND PASSWORD = '%2s'";
+	public static String insert_into_customer = "INSERT INTO customer (CUST_NAME, PASSWORD) values (?, ?)";
+	public static String update_customer_by_id = "UPDATE customer SET PASSWORD=? WHERE ID=?";
+
+	
+}

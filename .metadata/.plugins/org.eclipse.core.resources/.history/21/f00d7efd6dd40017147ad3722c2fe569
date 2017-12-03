@@ -1,0 +1,12 @@
+package allSqlQueriesAndDateConv;
+
+public class CustomerSqlQueries 
+{
+	
+	public static String customers_by_cust_name = "SELECT * FROM customer WHERE CUST_NAME ='%1s'";
+	public static String insert_customer_coupon = " INSERT INTO customer_coupon (CUST_ID,COUPON_ID) values (?, ?)"
+			+ " values (?, ?)";
+	public static String customers_by_name_and_password = "SELECT * FROM customer WHERE CUST_NAME = '%1s' AND PASSWORD = '%2s'";
+	public static String insert_into_customer = "INSERT INTO customer (CUST_NAME, PASSWORD) values (?, ?)";
+
+}

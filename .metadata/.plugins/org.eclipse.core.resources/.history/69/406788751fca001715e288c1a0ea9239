@@ -1,0 +1,284 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+
+
+import javaBeans.Company;
+import javaBeans.Coupon;
+import javaBeans.CouponType;
+import part1.ConnectionPool;
+
+public class CompanyDBDAO implements CompanyDAO
+{
+	private ConnectionPool pool;
+
+	public CompanyDBDAO() 
+	{
+		pool = ConnectionPool.getInstance();
+	}
+
+	@Override
+	public void createCompany(Company comp) 
+	{
+		// TODO Auto-generated method stub
+		Connection con = pool.getConnection();
+		Statement stt;
+		
+		ResultSet rs;
+		String create_company_query = "SELECT * FROM company WHERE ID='"+comp.getId()+"'";
+		try 
+		{
+			stt = con.createStatement();
+			rs = stt.executeQuery(create_company_query);
+			if(rs.next())
+			{
+				System.out.println("Company is exist!!");
+			}
+			else
+			{
+				String insert_company_query = "INSERT INT company (COMP_NAME, PASSWORD, EMAIL) values(?,?,?)";
+				try 
+				{
+					PreparedStatement prst = con.prepareStatement(insert_company_query);
+					prst.setString(1, comp.getCompName());
+					prst.setString(2, comp.getPassword());
+					prst.setString(3, comp.getEmail());
+					
+					prst.execute();
+				
+				} catch (Exception e) 
+				{
+					// TODO: handle exception
+				}
+				
+			}
+			pool.returnConnection(con1);
+
+		} catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	@Override
+	public void removeCompany(Company comp) 
+	{
+		// TODO Auto-generated method stub
+		Connection con1 = pool.getConnection();
+		Statement stt;
+		
+		ResultSet rs;
+		String remove_company_query = "SELECT * FROM company WHERE ID='"+comp.getId()+"'";
+		try 
+		{
+			stt = con1.createStatement();
+			rs = stt.executeQuery(remove_company_query);
+			if(rs.next())
+			{
+				String remove_company = "DELETE FROM company WHERE ID='"+comp.getId()+"'";
+				try 
+				{
+					stt.execute(remove_company);
+					Statement stt1 = con1.createStatement();
+					ResultSet rs1;
+					rs1 = stt1.executeQuery("SELECT coupon_id FROM company_coupon WHERE comp_id = '"+comp.getId()+"'");
+					while(rs1.next())
+					{
+						Statement stt2 = con1.createStatement();
+						String delcoup1 = "DELETE FROM coupon WHERE ID='"+rs1.getInt("coupon_id")+"'";
+						String delcoup2 = "DELETE FROM customer_coupon WHERE ID='"+rs1.getInt("coupon_id")+"'";
+						String delcoup3 = "DELETE FROM company_coupon WHERE ID='"+comp.getId()+"'";
+						stt2.execute(delcoup1);
+						stt2.execute(delcoup2);
+						stt2.execute(delcoup3);
+					}
+					pool.returnConnection(con1);
+					
+				} catch (Exception e) 
+				{
+					// TODO: handle exception
+				}
+			}
+			else
+			{
+				System.out.println("Company is not exist!!");
+			}
+			
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+
+	@Override
+	public void updateCompany(Company comp) 
+	{
+		// TODO Auto-generated method stub
+		Connection con1 = pool.getConnection();
+		try
+		{
+			Statement stt;
+			
+			ResultSet rs;
+			String upquery = "SELECT * FROM company WHERE ID='"+comp.getId()+"'";
+			stt = con1.createStatement();
+			rs = stt.executeQuery(upquery);
+			if(rs.next())
+			{
+			
+				String updatequery = "UPDATE company SET PASSWORD=?, EMAIL=? WHERE ID=?";
+				PreparedStatement prpst = con1.prepareStatement(updatequery);
+				prpst.setString(1, comp.getPassword());
+				prpst.setString(2, comp.getEmail());
+				prpst.setLong(3, comp.getId());
+				prpst.execute();
+			}
+			pool.returnConnection(con1);
+			
+		} catch (Exception e)
+		{
+			// TODO: handle exception
+		}
+		
+	}
+
+	@Override
+	public Company getCompany(int id) 
+	{
+		// TODO Auto-generated method stub
+		Connection con1 = pool.getConnection();
+		Company cpny = new Company();
+
+		try
+		{
+			Statement stt;
+			
+			ResultSet rs;
+			String upquery = "SELECT * FROM company WHERE ID='"+id+"'";
+			stt = con1.createStatement();
+			rs = stt.executeQuery(upquery);
+			if(rs.next())
+			{
+				cpny.setId(rs.getInt("ID"));
+				cpny.setCompName(rs.getString("COMP_NAME"));
+				cpny.setEmail("EMAIL");
+				cpny.setPassword("PASSWORD");
+				ArrayList<Coupon> arrayCoupon = new ArrayList<>();
+				String coupnsQuery = "SELECT COUPON_ID FROM company_coupon WHERE COMP_ID='"+(rs.getInt("ID"))+"'";
+				
+				Statement stt2 = con1.createStatement();
+				ResultSet rs1;
+				rs1 = stt2.executeQuery(coupnsQuery);
+				while(rs1.next())
+				{
+					Statement stt3 = con1.createStatement();
+					ResultSet rs2;
+					String coupnsQuery1 = "SELECT * FROM coupon WHERE ID='"+(rs1.getInt("COUPON_ID"))+"'";
+					rs2 = stt3.executeQuery(coupnsQuery1);
+					while(rs2.next())
+					{
+						Coupon cpon = new Coupon();
+						cpon.setId(rs2.getInt("ID"));
+						cpon.setTitle(rs2.getString("TITLE"));
+						cpon.setStartDate(rs2.getDate("START_DATE"));
+						cpon.setEndDate(rs2.getDate("END_DATE"));
+						cpon.setAmount(rs2.getInt("AMOUNT"));
+						cpon.setType(CouponType.valueOf(rs2.getString("TYPE")));
+						cpon.setMessage(rs2.getString("MESAAGE"));
+						cpon.setPrice(rs2.getDouble("PRICE"));
+						cpon.setImage(rs2.getString("IMAGE"));
+						
+						arrayCoupon.add(cpon);
+					}
+
+					
+				}
+				cpny.setCoupons(arrayCoupon);
+			}
+			pool.returnConnection(con1);
+		}catch (Exception e) 
+		{
+			// TODO: handle exception
+		}
+		return cpny;
+
+		
+	}
+
+	@Override
+	public Collection<Company> getAllCompanies() 
+	{
+		// TODO Auto-generated method stub
+		
+		ArrayList<Company> arraycompany = new ArrayList();
+		Connection conn = pool.getConnection() ; 
+
+		try 
+		{
+			Statement stt3 = conn.createStatement();
+			ResultSet rs3;
+			String companyall = "SELECT ID company";
+			rs3 = stt3.executeQuery(companyall);
+			while(rs3.next())
+			{
+				Company thecompany = getCompany(rs3.getInt("ID"));
+				arraycompany.add(thecompany);
+				
+			}
+			pool.returnConnection(conn);
+			
+			
+		} catch (Exception e) 
+		{
+			
+			// TODO: handle exception
+		}
+		return arraycompany;
+	}
+
+	@Override
+	public Collection<Coupon> getCoupons() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+		
+	}
+
+	@Override
+	public boolean login(String compName, String password) 
+	{
+		// TODO Auto-generated method stub
+		Connection conn = pool.getConnection();
+		try 
+		{
+			Statement stt4 = conn.createStatement();
+			ResultSet rs;
+			String logquery = "SELECT * FROM compay WHERE COMP_NAME = '"+compName+"' and PASSWORD = '"+password+"'";
+			rs = stt4.executeQuery(logquery);
+			if(rs.next())
+			{
+				pool.returnConnection(conn);
+				return true;
+			}
+			pool.returnConnection(conn);
+				
+		} catch (Exception e) 
+		{
+			// TODO: handle exception
+		}
+		return false;
+
+	}
+	
+	
+}

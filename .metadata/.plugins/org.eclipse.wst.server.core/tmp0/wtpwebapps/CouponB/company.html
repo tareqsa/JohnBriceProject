@@ -1,0 +1,22 @@
+<html>
+<head>
+<script src="jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
+<script>
+	$(document).ready(function()
+	{
+	
+		$.ajax({url:"http://localhost:8080/CouponB/webapi/myresource"}).then(
+		function(data) 
+		{
+			document.write(data)
+			console.log(data)
+		}
+		,function(err) 
+		{ console.log(err);}		
+		);
+ 
+
+	});
+</script>
+</head>

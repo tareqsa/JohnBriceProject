@@ -1,0 +1,14 @@
+package allSqlQueries;
+
+public class CompanySqlQueries 
+{
+
+	public static String all_companies = "SELECT * FROM company";
+	public static String companies_by_id = "SELECT * FROM company WHERE ID='%1s'";
+	public static String insert_company = "INSERT INTO company (COMP_NAME, PASSWORD, EMAIL) values(?,?,?)";
+	public static String remove_company_by_id = "DELETE FROM company WHERE ID='%1s'";
+	public static String update_company_by_id = "UPDATE company SET PASSWORD=?, EMAIL=? WHERE ID=?";
+	public static String company_by_compName_and_pasword = "SELECT * FROM compay WHERE COMP_NAME = '%1s' and PASSWORD = '%2s'";
+
+	
+}

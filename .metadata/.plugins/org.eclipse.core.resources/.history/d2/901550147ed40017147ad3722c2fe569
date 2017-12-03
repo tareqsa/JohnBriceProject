@@ -1,0 +1,30 @@
+package dao;
+
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Collection;
+
+import exceptions.DuplicateEntryException;
+import exceptions.NullConnectionException;
+import javaBeans.Company;
+import javaBeans.Coupon;
+
+public interface CompanyDAO 
+{
+
+	public void createCompany(Company comp) throws ClassNotFoundException, InterruptedException, SQLException, DuplicateEntryException, NullConnectionException;
+	
+	public void removeCompany(Company comp)throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException;
+	
+	public void updateCompany(Company comp)throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException;
+	
+	public Company getCompany(int id)throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException, ParseException;
+	
+	public Collection<Company> getAllCompanies();
+	
+	public Collection<Coupon> getCoupons(); 
+	
+	public boolean login(String compName, String password);
+
+	
+}

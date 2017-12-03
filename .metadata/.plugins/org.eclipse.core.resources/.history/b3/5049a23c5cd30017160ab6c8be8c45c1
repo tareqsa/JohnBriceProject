@@ -1,0 +1,9 @@
+package allSqlQueries;
+
+public class CouponSqlQueries
+{
+	public static String coupon_id_by_comp_id = "SELECT COUPON_ID FROM company_coupon WHERE COMP_ID = '%1s'";
+	public static String delete_coupon_by_coupon_id = "DELETE FROM coupon WHERE ID='%1s'";
+	public static String delete_customer_coupon_by_coupon_id = "DELETE FROM customer_coupon WHERE COUPON_ID='%1s'";
+
+}

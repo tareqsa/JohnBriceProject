@@ -1,0 +1,95 @@
+package dao;
+
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Collection;
+
+import exceptions.DuplicateEntryException;
+import exceptions.EmptyEntryException;
+import exceptions.NullConnectionException;
+import javaBeans.Coupon;
+import javaBeans.CouponType;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface CouponDAO.
+ */
+public interface CouponDAO 
+{
+	
+	/**
+	 * Creates the coupon.
+	 *
+	 * @param coup the coup
+	 * @throws SQLException the SQL exception
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws InterruptedException the interrupted exception
+	 * @throws DuplicateEntryException the duplicate entry exception
+	 * @throws NullConnectionException the null connection exception
+	 */
+	public void createCoupon(Coupon coup) throws SQLException, ClassNotFoundException, InterruptedException, DuplicateEntryException, NullConnectionException;
+	
+	/**
+	 * Removes the coupon.
+	 *
+	 * @param coup the coup
+	 * @throws SQLException the SQL exception
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws InterruptedException the interrupted exception
+	 * @throws NullConnectionException the null connection exception
+	 * @throws EmptyEntryException the empty entry exception
+	 */
+	public void removeCoupon(Coupon coup) throws SQLException, ClassNotFoundException, InterruptedException, NullConnectionException, EmptyEntryException;
+	
+	/**
+	 * Update coupon.
+	 *
+	 * @param coup the coup
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws InterruptedException the interrupted exception
+	 * @throws SQLException the SQL exception
+	 * @throws ParseException the parse exception
+	 * @throws NullConnectionException the null connection exception
+	 * @throws EmptyEntryException the empty entry exception 
+	 * @throws DuplicateEntryException the empty entry exception 
+	 */
+	public void updateCoupon(Coupon coup) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException, EmptyEntryException, DuplicateEntryException;
+	
+	/**
+	 * Gets the coupon.
+	 *
+	 * @param id the id
+	 * @return the coupon
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws InterruptedException the interrupted exception
+	 * @throws SQLException the SQL exception
+	 * @throws ParseException the parse exception
+	 * @throws NullConnectionException the null connection exception
+	 */
+	public Coupon getCoupon(int id) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+	
+	/**
+	 * Gets the all coupon.
+	 *
+	 * @return the all coupon
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws InterruptedException the interrupted exception
+	 * @throws SQLException the SQL exception
+	 * @throws ParseException the parse exception
+	 * @throws NullConnectionException the null connection exception
+	 */
+	public Collection<Coupon> getAllCoupon() throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+	
+	/**
+	 * Gets the coupon by type.
+	 *
+	 * @param ctyp the ctyp
+	 * @return the coupon by type
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws InterruptedException the interrupted exception
+	 * @throws SQLException the SQL exception
+	 * @throws ParseException the parse exception
+	 * @throws NullConnectionException the null connection exception
+	 */
+	public Collection<Coupon> getCouponByType(CouponType ctyp) throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException;
+}

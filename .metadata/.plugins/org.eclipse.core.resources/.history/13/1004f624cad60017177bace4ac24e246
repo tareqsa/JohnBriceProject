@@ -1,0 +1,31 @@
+package dao;
+
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Collection;
+
+import exceptions.DuplicateEntryException;
+import exceptions.EmptyEntryException;
+import exceptions.NullConnectionException;
+import exceptions.WrongDataInputException;
+import javaBeans.Coupon;
+import javaBeans.Customer;
+
+public interface CustomerDAO 
+{
+	public void createCustomer(Customer cust) throws ClassNotFoundException, InterruptedException, SQLException, DuplicateEntryException, NullConnectionException;
+	
+	public void removeCustomer(Customer cust) throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException, EmptyEntryException;
+	
+	public void updateCustomer(Customer cust) throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException, EmptyEntryException;
+	
+	public Customer getCustomer(int id) throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException;
+	
+	public Collection<Customer> getAllCustomer() throws ClassNotFoundException, InterruptedException, SQLException, NullConnectionException;
+	
+	public Collection<Coupon> getCoupons() throws ClassNotFoundException, InterruptedException, SQLException, ParseException, NullConnectionException; 
+	
+	public boolean login(String custName, String password) throws ClassNotFoundException, InterruptedException, SQLException, WrongDataInputException, NullConnectionException;
+	
+
+}
