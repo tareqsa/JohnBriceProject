@@ -1,0 +1,106 @@
+package maintests;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import conPool.ConnectionPool;
+import facades.*;
+import javaBeans.*;
+
+public class Tester {
+
+	public static void main(String[] args) 
+	{
+
+		Connection conn = ConnectionPool.getInstance().getConnection();
+		try
+		{
+			Statement stt = conn.createStatement();
+			stt.execute("truncate company");
+			stt.execute("truncate company_coupon");
+			stt.execute("truncate customer");
+			stt.execute("truncate customer_coupon");
+			stt.execute("truncate coupon");
+		}
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		AdminFacade adminfacade;
+		CompanyFacade companyfacade;
+		CustomerFacade customerfacade;
+		System.out.println("starting");
+		
+		adminfacade = (AdminFacade) CouponSystem.getInstance().login("admin", "1234", ClientType.ADMIN);
+		
+		System.out.println("*************************************************create companies***********************************");
+		//create companies
+		Company comp1 = new Company(1,"amdocs","123","www@hello");
+		Company comp2 = new Company(2,"intel","456","www@hello");
+		Company comp3 = new Company(3,"redhat","789","www@hello");
+		Company comp4 = new Company(4,"checkpoint","101","www@hello");
+		adminfacade.createCompany(comp1);
+		adminfacade.createCompany(comp2);
+		adminfacade.createCompany(comp3);
+		adminfacade.createCompany(comp4);
+		//trying to create an exist company
+		adminfacade.createCompany(comp4);
+		
+		
+		System.out.println("*************************************************create customers***********************************");
+		//create customers
+		Customer cust1 = new Customer(1,"eli","111");
+		Customer cust2 = new Customer(2,"moshe","222");
+		Customer cust3 = new Customer(3,"haim","333");
+		Customer cust4 = new Customer(4,"erez","444");
+		adminfacade.createCustomer(cust1);
+		adminfacade.createCustomer(cust2);
+		adminfacade.createCustomer(cust3);
+		adminfacade.createCustomer(cust4);
+		//trying to create an exist customer
+		adminfacade.createCustomer(cust4);
+		
+		
+		System.out.println("*************************************************getAll companies***********************************");
+		//get all companies
+		System.out.println(adminfacade.getAllCompanies());
+		
+		System.out.println("*************************************************getAll customers***********************************");
+		//get all customers
+		System.out.println(adminfacade.getAllCustomer());
+		
+		System.out.println("*************************************************update and get company***********************************");
+		//update and get the company
+		Company company1 = adminfacade.getCompany(1);
+		company1.setEmail("tareq@gmail.com");
+		adminfacade.updateCompany(company1);
+		System.out.println(adminfacade.getCompany(1));
+		
+		System.out.println("*************************************************update and get customer***********************************");
+		//update and get the customer
+		Customer customer1 = adminfacade.getCustomer(2);
+		customer1.setPassword("555");
+		adminfacade.updateCustomer(customer1);
+		System.out.println(adminfacade.getCustomer(2));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}

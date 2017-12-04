@@ -53,7 +53,6 @@ public class AdminFacade implements CouponClientFacade
 		try
 		{
 			compdbdao.createCompany(company);
-			//System.out.println("am here");
 		}
 		catch (ClassNotFoundException | InterruptedException | SQLException | DuplicateEntryException | NullConnectionException e)
 		{

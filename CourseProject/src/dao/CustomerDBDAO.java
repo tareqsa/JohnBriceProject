@@ -98,7 +98,7 @@ public class CustomerDBDAO implements CustomerDAO
 			prst.setString(1, cust.getCustName());
 			prst.setString(2, cust.getPassword());
 			prst.execute();
-			System.out.println("Customer created Successfully:) ");
+			System.out.println("Customer " +cust.getCustName()+ " has bee created Successfully:)");
 		}
 		pool.returnConnection(con2);
 
@@ -122,7 +122,7 @@ public class CustomerDBDAO implements CustomerDAO
 		{
 			stt.execute(String.format(CustomerSqlQueries.delete_customer_by_cust_name, cust.getCustName()));
 			stt.execute(String.format(CustomerSqlQueries.delete_customer_coupon_by_cust_id, cust.getId()));	
-			System.out.println("Customer has been removed!!");
+			System.out.println("Customer "+cust.getCustName()+" has been removed!!");
 		}
 		else
 		{
@@ -153,7 +153,7 @@ public class CustomerDBDAO implements CustomerDAO
 			prpst.setString(1, cust.getPassword());
 			prpst.setLong(2, cust.getId());
 			prpst.executeUpdate();
-			System.out.println("customer " + cust.getCustName() + " has been updated");
+			System.out.println("customer " + cust.getCustName() + " has been updated!!");
 
 		}
 		else

@@ -72,7 +72,7 @@ public class CouponSystem {
 			    login = customerfacade.login(name, password, clientType);
 			    if (login!=null)
 			    {
-				System.out.println("welcome customer " + name);
+				System.out.println("\nwelcome customer " + name);
 			    return customerfacade;
 			    }
 			break;
@@ -82,7 +82,7 @@ public class CouponSystem {
 			    login = companyfacade.login(name, password, clientType);
 			    if (login!=null)
 			    {
-				System.out.println("welcome " + name + " company");
+				System.out.println("\nwelcome " + name + " company");
 				companyfacade.setUserId();
 				return companyfacade;
 			    }
@@ -95,7 +95,7 @@ public class CouponSystem {
 				login = adminfacade.login(name, password, clientType);
 			    if (login!=null)
 			    {
-			    System.out.println("welcome admin");
+			    System.out.println("\nwelcome admin");
 				return adminfacade;
 			    }
 		    }

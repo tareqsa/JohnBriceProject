@@ -22,10 +22,8 @@
 <fullyQualifiedTypeName name="java.beans.Statement"/>
 <fullyQualifiedTypeName name="java.lang.Thread.State"/>
 <fullyQualifiedTypeName name="javaBeans.CouponType"/>
-<fullyQualifiedTypeName name="java.sql.Connection"/>
 <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
 <fullyQualifiedTypeName name="javaBeans.Coupon"/>
-<fullyQualifiedTypeName name="javaBeans.Company"/>
 <fullyQualifiedTypeName name="javax.naming.spi.DirStateFactory.Result"/>
 <fullyQualifiedTypeName name="java.lang.Runnable"/>
 <fullyQualifiedTypeName name="dao.CouponDBDAO"/>
@@ -35,9 +33,7 @@
 <fullyQualifiedTypeName name="allSqlQueries.CompanySqlQueries"/>
 <fullyQualifiedTypeName name="java.util.Calendar"/>
 <fullyQualifiedTypeName name="java.sql.Date"/>
-<fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="allSqlQueries.CouponSqlQueries"/>
-<fullyQualifiedTypeName name="java.sql.Statement"/>
 <fullyQualifiedTypeName name="exceptions.WrongDataInputException"/>
 <fullyQualifiedTypeName name="exceptions.UnAvailableCouponException"/>
 <fullyQualifiedTypeName name="exceptions.DuplicateCouponTypeException"/>
@@ -48,6 +44,12 @@
 <fullyQualifiedTypeName name="exceptions.GeneralExceptionHandler"/>
 <fullyQualifiedTypeName name="allSqlQueriesAndDateConv.CustomerSqlQueries"/>
 <fullyQualifiedTypeName name="javaBeans.CouponSystem"/>
-<fullyQualifiedTypeName name="allSqlQueriesAndDateConv.DateConverter"/>
 <fullyQualifiedTypeName name="exceptions.DuplicateEntryException"/>
+<fullyQualifiedTypeName name="conPool.ConnectionPool"/>
+<fullyQualifiedTypeName name="java.sql.Connection"/>
+<fullyQualifiedTypeName name="java.sql.Statement"/>
+<fullyQualifiedTypeName name="javaBeans.Company"/>
+<fullyQualifiedTypeName name="facades.AdminFacade"/>
+<fullyQualifiedTypeName name="allSqlQueriesAndDateConv.DateConverter"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
 </qualifiedTypeNameHistroy>

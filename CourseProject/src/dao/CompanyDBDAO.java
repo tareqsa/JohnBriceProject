@@ -102,7 +102,7 @@ public class CompanyDBDAO implements CompanyDAO
 			prst.setString(3, comp.getEmail());
 
 			prst.execute();
-			System.out.println("companies inserted:)");
+			System.out.println(comp.getCompName()+ " company has been inserted :)");
 		}
 		pool.returnConnection(con);
 	}
@@ -121,21 +121,24 @@ public class CompanyDBDAO implements CompanyDAO
 		ResultSet rs;
 		Statement stt;
 		stt = con.createStatement();
-		rs = stt.executeQuery(String.format(CompanySqlQueries.companies_by_id, comp.getId()));
+		long compId = comp.getId();
+
+		rs = stt.executeQuery(String.format(CompanySqlQueries.companies_by_id, compId));
 		if(rs.next())
 		{
-			long compId = comp.getId();
 			stt.execute(String.format(CompanySqlQueries.remove_company_by_id, compId));
 
 			ResultSet rs1;
 			Statement stt1 = con.createStatement(); 
-			rs1 = stt1.executeQuery(String.format(CouponSqlQueries.coupon_id_by_comp_id, comp.getId()));
+			rs1 = stt1.executeQuery(String.format(CouponSqlQueries.coupon_id_by_comp_id, compId));
 			while(rs1.next())
 			{
 				Statement stt2 = con.createStatement();
 				stt2.execute(String.format(CouponSqlQueries.delete_coupon_by_coupon_id, rs1.getInt("COUPON_ID")));
 				stt2.execute(String.format(CouponSqlQueries.delete_customer_coupon_by_coupon_id, rs1.getLong("COUPON_ID")));
-				stt2.execute(String.format(CouponSqlQueries.delete_company_coupon_by_coupon_id, compId));
+				stt2.execute(String.format(CouponSqlQueries.delete_company_coupon_by_coupon_id, rs1.getLong("COUPON_ID")));
+
+				System.out.println(comp.getCompName()+ " company has been removed with all its coupons!!");
 			}
 
 		}
@@ -168,6 +171,7 @@ public class CompanyDBDAO implements CompanyDAO
 			prpst.setString(2, comp.getEmail());
 			prpst.setLong(3, comp.getId());
 			prpst.execute();
+			System.out.println(comp.getCompName() + " company has been updated!!");
 		}
 		else
 		{
